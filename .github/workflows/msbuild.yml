@@ -51,10 +51,11 @@ jobs:
         curl -sSLo $HOME\.sonar\build-wrapper.zip ${{ env.BUILD_WRAPPER_DOWNLOAD_URL }}
         unzip -o $HOME\.sonar\build-wrapper.zip -d $HOME\.sonar\
         echo "$HOME\.sonar\build-wrapper-win-x86" | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
-    # - name: Run build-wrapper
-    #   run: |
-    #     SET PATH=%PATH%;%cd%\build\build-wrapper-win-x86
-    #     build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} "msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}"
+    - name: Run build-wrapper
+      run: |
+        SET PATH=%PATH%;%cd%\build\build-wrapper-win-x86
+        build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} msbuild sonartest.vcxproj /t:rebuild /node 
+      # ${{env.SOLUTION_FILE_PATH}}
     - name: Run sonar-scanner
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
